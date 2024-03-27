@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import { cn } from "@/lib/utils";
 import styles from "./circular-progress.module.css";
 
 type CircularProgress = {
@@ -18,7 +18,7 @@ const CircularProgress = ({
     <svg
       viewBox="25 25 50 50"
       width={size}
-      className={classNames(className, styles.container)}
+      className={cn(className, styles.container)}
     >
       <circle
         r="20"

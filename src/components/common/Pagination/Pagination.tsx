@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import classNames from "classnames";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -36,7 +36,7 @@ const Pagination = ({ currentPage, onChangePageNumber }: Pagination) => {
       ).map((pageNumber) => (
         <button
           key={pageNumber}
-          className={classNames(
+          className={cn(
             pageNumber === paginationDate.pageNumber
               ? "bg-gray-200 outline outline-1 border-gray-600"
               : "bg-white",

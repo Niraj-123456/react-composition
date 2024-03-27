@@ -11,15 +11,30 @@ import { useForm } from "react-hook-form";
 import { Minus, Plus } from "lucide-react";
 import { imageFormatter } from "@/lib/imageUtils";
 import { useState } from "react";
-import classNames from "classnames";
+import { cn } from "@/lib/utils";
 
 const maxStockQuantity = 10;
 
+type IFormInput = {
+  quantity: number;
+};
+
 const ProductDetail = () => {
   const { id } = useParams();
-  const form = useForm();
+
   const [selectedImageIdx, setSelectedImageIdx] = useState(0);
-  const [quantity, setQuantity] = useState(1);
+
+  const form = useForm({
+    defaultValues: {
+      quantity: 1,
+    },
+  });
+
+  const { control, setValue, formState, watch } = form;
+
+  const { defaultValues } = formState;
+
+  const quantity = watch("quantity", defaultValues?.quantity);
 
   const { data, isFetching } = useQuery("product", () => fetchProduct(id));
 
@@ -27,6 +42,10 @@ const ProductDetail = () => {
 
   const handleUpdateSelectedImageIdx = (idx: number) => {
     setSelectedImageIdx(idx);
+  };
+
+  const onSubmit = (data: IFormInput) => {
+    console.log("form data", data);
   };
 
   if (isFetching) {
@@ -50,7 +69,7 @@ const ProductDetail = () => {
                   <div
                     onClick={() => handleUpdateSelectedImageIdx(idx)}
                     key={idx}
-                    className={classNames(
+                    className={cn(
                       "rounded-md p-1 cursor-pointer transition-all hover:border-gray-800 hover:shadow-md",
                       idx === selectedImageIdx
                         ? "ring-2 ring-gray-800"
@@ -97,25 +116,26 @@ const ProductDetail = () => {
 
             <div className="mt-6">
               <Form {...form}>
-                <form>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
                   <div className="flex gap-2 items-center">
                     <Button
                       className="text-xl py-6"
-                      onClick={() => setQuantity((prev) => prev - 1)}
+                      onClick={() => setValue("quantity", quantity - 1)}
                       disabled={quantity === 1}
                     >
                       <Minus />
                     </Button>
                     <FormField
-                      control={form.control}
+                      control={control}
                       name="quantity"
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>
                             <Input
+                              readOnly
                               placeholder="Quantity"
                               {...field}
-                              className="py-6 text-lg"
+                              className="py-6 text-lg max-w-sm w-40"
                             />
                           </FormControl>
                         </FormItem>
@@ -123,7 +143,7 @@ const ProductDetail = () => {
                     />
                     <Button
                       className="text-xl py-6"
-                      onClick={() => setQuantity((prev) => prev + 1)}
+                      onClick={() => setValue("quantity", quantity + 1)}
                       disabled={quantity === maxStockQuantity}
                     >
                       <Plus />
@@ -148,13 +168,18 @@ const ProductDetail = () => {
               </Form>
             </div>
 
-            <section aria-labelledby="details-heading" className="mt-12">
-              <h2 id="details-heading" className="sr-only">
-                Additional details
-              </h2>
+            <div className="mt-8 border-t border-gray-200 pt-8">
+              <h2 className="text-sm font-medium text-gray-900">Features</h2>
 
-              <div className="divide-y divide-gray-200 border-t"></div>
-            </section>
+              <div className="prose prose-sm mt-4 text-gray-500">
+                <ul role="list">
+                  <li>Only the best materials</li>
+                  <li>Ethically and locally made</li>
+                  <li>Pre-washed and pre-shrunk</li>
+                  <li>Machine wash cold with similar colors</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>

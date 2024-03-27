@@ -1,5 +1,5 @@
 import { Star } from "lucide-react";
-import classNames from "classnames";
+import { cn } from "@/lib/utils";
 
 type Rating = {
   rating: {
@@ -17,7 +17,7 @@ const ProductRating = ({ rating }: Rating) => {
           {[0, 1, 2, 3, 4].map((rate) => (
             <Star
               key={rate}
-              className={classNames(
+              className={cn(
                 rating.rate > rate ? "text-yellow-500" : "text-gray-300",
                 "h-5 w-5 flex-shrink-0"
               )}
