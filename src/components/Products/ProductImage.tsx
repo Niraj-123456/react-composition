@@ -3,7 +3,7 @@ const ProductImage = ({ image, alt }: { image: string; alt: string }) => {
     <img
       src={image}
       alt={alt}
-      className="absolute w-full h-56 object-contain object-center"
+      className="absolute w-full h-[190px] object-contain object-center"
     />
   );
 };

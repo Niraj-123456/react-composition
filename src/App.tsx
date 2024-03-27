@@ -1,9 +1,9 @@
-import "./index.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Products from "./components/Products/Products";
 import ProductDetail from "./components/Products/ProductDetail";
-import Header from "./components/Header/Header";
+import RootLayout from "./components/common/Layout/RootLayout";
+import NotFound from "./components/NotFound/NotFound";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -14,15 +14,19 @@ const queryClient = new QueryClient({
 });
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <Header />
-        <Routes>
-          <Route path="/product/:id" element={<ProductDetail />} />
-          <Route path="/" element={<Products />} />
-        </Routes>
-      </Router>
-    </QueryClientProvider>
+    <div className="w-full">
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <Routes>
+            <Route path="/" element={<RootLayout />}>
+              <Route path="/product/:id" element={<ProductDetail />} />
+              <Route index element={<Products />} />
+              <Route path="/*" element={<NotFound />} />
+            </Route>
+          </Routes>
+        </Router>
+      </QueryClientProvider>
+    </div>
   );
 }
 

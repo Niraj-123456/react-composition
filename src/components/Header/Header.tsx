@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 const Header = () => {
   return (
-    <div className="w-full p-4 border border-black">
+    <div className="w-full h-[var(--default-header-height)] py-4 px-8 ">
       <div className="flex justify-between items-center">
         <h1>Fake Store</h1>
 
