@@ -10,14 +10,24 @@ import { Input } from "../ui/input";
 import { useForm } from "react-hook-form";
 import { Minus, Plus } from "lucide-react";
 import { imageFormatter } from "@/lib/imageUtils";
+import { useState } from "react";
+import classNames from "classnames";
+
+const maxStockQuantity = 10;
 
 const ProductDetail = () => {
   const { id } = useParams();
   const form = useForm();
+  const [selectedImageIdx, setSelectedImageIdx] = useState(0);
+  const [quantity, setQuantity] = useState(1);
 
   const { data, isFetching } = useQuery("product", () => fetchProduct(id));
 
   const product: Product = data?.data;
+
+  const handleUpdateSelectedImageIdx = (idx: number) => {
+    setSelectedImageIdx(idx);
+  };
 
   if (isFetching) {
     return <Loading />;
@@ -29,34 +39,33 @@ const ProductDetail = () => {
         <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
           <div className="flex flex-col gap-6 p-2">
             <img
-              src={imageFormatter(product.images[0])}
+              src={imageFormatter(product.images[selectedImageIdx])}
               alt={product.title}
               className="w-full h-96 object-contain object-center"
             />
 
-            <div className="flex items-center justify-center gap-3">
-              <div className="border-2 border-gray-400 rounded-md p-1 cursor-pointer transition-all hover:border-gray-800 hover:shadow-md">
-                <img
-                  src={imageFormatter(product.images[0])}
-                  alt={product.title}
-                  className="w-20 h-20 object-contain object-center"
-                />
+            {product.images.length > 0 && (
+              <div className="flex items-center justify-center gap-3">
+                {product.images?.map((image, idx) => (
+                  <div
+                    onClick={() => handleUpdateSelectedImageIdx(idx)}
+                    key={idx}
+                    className={classNames(
+                      "rounded-md p-1 cursor-pointer transition-all hover:border-gray-800 hover:shadow-md",
+                      idx === selectedImageIdx
+                        ? "ring-2 ring-gray-800"
+                        : "ring-1 ring-gray-400"
+                    )}
+                  >
+                    <img
+                      src={imageFormatter(image)}
+                      alt={product.title}
+                      className="w-20 h-20 object-contain object-center"
+                    />
+                  </div>
+                ))}
               </div>
-              <div className="border-2 border-gray-400 rounded-md p-1 cursor-pointer transition-all hover:border-gray-800 hover:shadow-md">
-                <img
-                  src={imageFormatter(product.images[1])}
-                  alt={product.title}
-                  className="w-20 h-20 object-contain object-center"
-                />
-              </div>
-              <div className="border-2 border-gray-400 rounded-md p-1 cursor-pointer transition-all hover:border-gray-800 hover:shadow-md">
-                <img
-                  src={imageFormatter(product.images[2])}
-                  alt={product.title}
-                  className="w-20 h-20 object-contain object-center"
-                />
-              </div>
-            </div>
+            )}
           </div>
 
           {/* Product info */}
@@ -90,8 +99,12 @@ const ProductDetail = () => {
               <Form {...form}>
                 <form>
                   <div className="flex gap-2 items-center">
-                    <Button className="text-xl py-6">
-                      <Plus />
+                    <Button
+                      className="text-xl py-6"
+                      onClick={() => setQuantity((prev) => prev - 1)}
+                      disabled={quantity === 1}
+                    >
+                      <Minus />
                     </Button>
                     <FormField
                       control={form.control}
@@ -108,8 +121,12 @@ const ProductDetail = () => {
                         </FormItem>
                       )}
                     />
-                    <Button className="text-xl py-6">
-                      <Minus />
+                    <Button
+                      className="text-xl py-6"
+                      onClick={() => setQuantity((prev) => prev + 1)}
+                      disabled={quantity === maxStockQuantity}
+                    >
+                      <Plus />
                     </Button>
                   </div>
                   <div className="mt-6 flex gap-2 flex-col sm:flex-row">

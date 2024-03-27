@@ -2,9 +2,7 @@ import axios from "axios";
 
 export function fetchProducts(pageNumber: number, limit: number) {
   return axios.get(
-    `https://api.escuelajs.co/api/v1/products?offset=${
-      pageNumber - 1
-    }&limit=${limit}`
+    `https://api.escuelajs.co/api/v1/products?offset=${pageNumber}&limit=${limit}`
   );
 }
 
