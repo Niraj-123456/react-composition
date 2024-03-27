@@ -9,6 +9,7 @@ import { Form, FormControl, FormField, FormItem } from "../ui/form";
 import { Input } from "../ui/input";
 import { useForm } from "react-hook-form";
 import { Minus, Plus } from "lucide-react";
+import { imageFormatter } from "@/lib/imageUtils";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -28,7 +29,7 @@ const ProductDetail = () => {
         <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
           <div className="flex flex-col gap-6 p-2">
             <img
-              src={product.image}
+              src={imageFormatter(product.images[0])}
               alt={product.title}
               className="w-full h-96 object-contain object-center"
             />
@@ -36,23 +37,23 @@ const ProductDetail = () => {
             <div className="flex items-center justify-center gap-3">
               <div className="border-2 border-gray-400 rounded-md p-1 cursor-pointer transition-all hover:border-gray-800 hover:shadow-md">
                 <img
-                  src={product.image}
+                  src={imageFormatter(product.images[0])}
                   alt={product.title}
-                  className="w-20 h-24 object-contain object-center"
+                  className="w-20 h-20 object-contain object-center"
                 />
               </div>
               <div className="border-2 border-gray-400 rounded-md p-1 cursor-pointer transition-all hover:border-gray-800 hover:shadow-md">
                 <img
-                  src={product.image}
+                  src={imageFormatter(product.images[1])}
                   alt={product.title}
-                  className="w-20 h-24 object-contain object-center"
+                  className="w-20 h-20 object-contain object-center"
                 />
               </div>
               <div className="border-2 border-gray-400 rounded-md p-1 cursor-pointer transition-all hover:border-gray-800 hover:shadow-md">
                 <img
-                  src={product.image}
+                  src={imageFormatter(product.images[2])}
                   alt={product.title}
-                  className="w-20 h-24 object-contain object-center"
+                  className="w-20 h-20 object-contain object-center"
                 />
               </div>
             </div>
@@ -73,7 +74,7 @@ const ProductDetail = () => {
 
             {/* Reviews */}
             <div className="mt-3">
-              <ProductRating rating={product.rating} />
+              <ProductRating rating={{ rate: 4, count: 140 }} />
             </div>
 
             <div className="mt-6">
